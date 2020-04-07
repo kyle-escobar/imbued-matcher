@@ -48,7 +48,7 @@ class MenuController : Controller() {
         val file = files.first()
 
         projectController.matchManager?.projectName = file.nameWithoutExtension
-        val bytes = projectController.matchManager?.toByteArray()
+        val bytes = projectController.matchManager?.toProjectFileBytes()
 
         Logger.info("Saving project to file: '${file.name}'.")
 

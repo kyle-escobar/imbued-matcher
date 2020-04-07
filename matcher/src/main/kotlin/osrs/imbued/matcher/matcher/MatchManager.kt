@@ -5,7 +5,10 @@ import org.msgpack.jackson.dataformat.MessagePackFactory
 import org.tinylog.kotlin.Logger
 import osrs.imbued.matcher.asm.model.ClassGroup
 import osrs.imbued.matcher.common.Progress
+import osrs.imbued.matcher.common.getChecksum
 import osrs.imbued.matcher.matcher.project.ProjectFile
+import osrs.imbued.matcher.matcher.project.ProjectJarFile
+import osrs.imbued.matcher.matcher.project.ProjectJarType
 import java.io.File
 
 /**
@@ -39,6 +42,11 @@ class MatchManager {
      */
     lateinit var referenceGroup: ClassGroup
 
+    /*************************************************
+     * The project save file. Not initialized.
+     *************************************************/
+    var projectFile: ProjectFile? = null
+
     /**
      * Initializes the project from jar files.
      * @param inputJar The input jar file (new jar)
@@ -64,15 +72,29 @@ class MatchManager {
      * Converts the relevant fields for a project save to a packed binary
      * file which can be saved as a project file.
      */
-    fun toByteArray(): ByteArray {
-        val project = ProjectFile(
+    fun toProjectFileBytes(): ByteArray {
+        if(this.projectFile == null) {
+            this.buildProjectFile()
+        }
+
+        val objectMapper = ObjectMapper(MessagePackFactory())
+        return objectMapper.writeValueAsBytes(projectFile)
+    }
+
+    /**
+     * Builds an initializes the [projectFile]
+     */
+    private fun buildProjectFile() {
+        val inputJarFile = ProjectJarFile(inputJar.nameWithoutExtension, inputJar.getChecksum(), ProjectJarType.INPUT)
+        val referenceJarFile = ProjectJarFile(referenceJar.nameWithoutExtension, referenceJar.getChecksum(), ProjectJarType.REFERENCE)
+
+        this.projectFile = ProjectFile(
             projectName = this.projectName,
+            inputJar = inputJarFile,
+            referenceJar = referenceJarFile,
             inputGroupBytes = this.inputGroup.toByteArray(),
             referenceGroupBytes = this.referenceGroup.toByteArray()
         )
-
-        val objectMapper = ObjectMapper(MessagePackFactory())
-        return objectMapper.writeValueAsBytes(project)
     }
 
     companion object {
