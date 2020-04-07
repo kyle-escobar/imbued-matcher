@@ -40,7 +40,7 @@ class Matcher {
         this.inputJar = inputJar
         this.referenceJar = referenceJar
 
-        inputGroup.extractJar(inputJar).forEach { inputGroup.add(it) }
-        referenceGroup.extractJar(referenceJar).forEach { referenceGroup.add(it) }
+        inputGroup.extractJar(inputJar)
+        referenceGroup.extractJar(referenceJar)
     }
 }

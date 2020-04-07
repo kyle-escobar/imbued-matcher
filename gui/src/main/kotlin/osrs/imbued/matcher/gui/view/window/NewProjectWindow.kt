@@ -80,6 +80,8 @@ class NewProjectWindow : View("New Project") {
             button("Create").action {
                 newProjectController.createProject()
                 close()
+
+                find<ProgressWindow>().openModal()
             }
         }
     }

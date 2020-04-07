@@ -27,9 +27,7 @@ class ClassGroup {
     /**
      * Extracts each class in a jar file into a [ClassNode] object.
      */
-    fun extractJar(file: File): Collection<ClassNode> {
-        val list = mutableListOf<ClassNode>()
-
+    fun extractJar(file: File) {
         JarFile(file).use { jar ->
             jar.stream().iterator().asSequence()
                 .filter { it.name.endsWith(".class") }
@@ -37,10 +35,8 @@ class ClassGroup {
                     val node = ClassNode()
                     val reader = ClassReader(jar.getInputStream(it))
                     reader.accept(node, ClassReader.SKIP_FRAMES or ClassReader.SKIP_DEBUG)
-                    list.add(node)
+                    this.add(node)
                 }
         }
-
-        return list
     }
 }
