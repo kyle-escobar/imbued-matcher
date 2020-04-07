@@ -50,8 +50,9 @@ class NewProjectController : Controller() {
         /**
          * Open the file chooser and add the file to the target observable.
          */
-        val file = chooseFile("Choose Jar", arrayOf(FileChooser.ExtensionFilter("Jar", "*.jar"))).first()
-        target.add(file)
+        val files = chooseFile("Choose Jar", arrayOf(FileChooser.ExtensionFilter("Jar", "*.jar")))
+        if(files.isEmpty()) return
+        target.add(files.first())
     }
 
     /**
