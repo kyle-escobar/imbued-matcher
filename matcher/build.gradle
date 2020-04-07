@@ -3,4 +3,8 @@ description = "Imbued Matcher"
 dependencies {
     api project(':asm')
     api project(':common')
+
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    implementation "org.msgpack:msgpack-core:$msgpackVersion"
+    implementation "org.msgpack:jackson-dataformat-msgpack:$msgpackVersion"
 }

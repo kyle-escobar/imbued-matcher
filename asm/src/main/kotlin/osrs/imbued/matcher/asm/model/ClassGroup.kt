@@ -1,9 +1,12 @@
 package osrs.imbued.matcher.asm.model
 
 import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.tree.ClassNode
 import osrs.imbued.matcher.common.Progress
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.nio.ByteBuffer
 import java.util.jar.JarFile
 
 /**
@@ -49,5 +52,21 @@ class ClassGroup {
                 progress.setProgress( progress.currentProgress + (0.5 / (steps / step)))
             }
         }
+    }
+
+    /**
+     * Converts the contents of [classes] to a buffered [ByteArray].
+     * This is used to store within a packed
+     */
+    fun toByteArray(): ByteArray {
+        val outBuf = ByteArrayOutputStream()
+
+        classes.forEach { c ->
+            val writer = ClassWriter(ClassWriter.COMPUTE_MAXS)
+            c.node.accept(writer)
+            outBuf.writeBytes(writer.toByteArray())
+        }
+
+        return outBuf.toByteArray()
     }
 }

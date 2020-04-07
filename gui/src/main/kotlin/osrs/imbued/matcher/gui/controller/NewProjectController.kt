@@ -5,7 +5,7 @@ import javafx.stage.FileChooser
 import org.tinylog.kotlin.Logger
 import osrs.imbued.matcher.gui.util.runProgressTask
 import osrs.imbued.matcher.gui.view.window.NewProjectWindow
-import osrs.imbued.matcher.matcher.Matcher
+import osrs.imbued.matcher.matcher.MatchManager
 import tornadofx.Controller
 import tornadofx.alert
 import tornadofx.asObservable
@@ -102,10 +102,10 @@ class NewProjectController : Controller() {
         runProgressTask("Initializing project...") {
             it.onComplete = { this.reset() }
 
-            val matcher = Matcher()
+            val matcher = MatchManager()
             matcher.initFromFiles(inputJars.first(), referenceJars.first(), it)
 
-            projectController.project = matcher
+            projectController.matchManager = matcher
             projectController.initProject()
         }
     }

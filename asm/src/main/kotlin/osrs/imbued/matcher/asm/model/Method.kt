@@ -2,11 +2,12 @@ package osrs.imbued.matcher.asm.model
 
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.MethodNode
+import osrs.imbued.matcher.asm.Matchable
 
 /**
  * Represents an ASM loaded method node.
  */
-class Method(val group: ClassGroup, val clazz: Class, val node: MethodNode) {
+class Method(val group: ClassGroup, val clazz: Class, val node: MethodNode) : Matchable<Method>() {
 
     companion object {
         const val CONSTRUCTOR_NAME = "<init>"

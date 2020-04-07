@@ -2,11 +2,12 @@ package osrs.imbued.matcher.asm.model
 
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.FieldNode
+import osrs.imbued.matcher.asm.Matchable
 
 /**
  * Represents an ASM loaded field.
  */
-class Field(val group: ClassGroup, val clazz: Class, val node: FieldNode) {
+class Field(val group: ClassGroup, val clazz: Class, val node: FieldNode) : Matchable<Field>() {
 
     val name get() = node.name
 

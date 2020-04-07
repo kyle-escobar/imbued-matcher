@@ -2,11 +2,12 @@ package osrs.imbued.matcher.asm.model
 
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.ClassNode
+import osrs.imbued.matcher.asm.Matchable
 
 /**
  * Represents an ASM [ClassNode]
  */
-class Class(val group: ClassGroup, val node: ClassNode) {
+class Class(val group: ClassGroup, val node: ClassNode) : Matchable<Class>() {
 
     val name get() = node.name
 

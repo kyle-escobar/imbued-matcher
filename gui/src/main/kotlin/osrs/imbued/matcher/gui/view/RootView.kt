@@ -1,7 +1,9 @@
 package osrs.imbued.matcher.gui.view
 
+import javafx.scene.control.MenuItem
 import javafx.scene.layout.BorderPane
 import osrs.imbued.matcher.gui.controller.MenuController
+import osrs.imbued.matcher.gui.controller.ProjectController
 import tornadofx.*
 
 /**
@@ -15,6 +17,14 @@ class RootView : View("Imbued Matcher") {
      * Controllers
      */
     private val menuController: MenuController by inject()
+    private val projectController: ProjectController by inject()
+
+    /**
+     * Menu items
+     */
+    var save: MenuItem by singleAssign()
+    var saveAs: MenuItem by singleAssign()
+    var exportMappings: MenuItem by singleAssign()
 
     /**
      * Initialize the view window.
@@ -28,9 +38,19 @@ class RootView : View("Imbued Matcher") {
                     item("New Project"). action { menuController.newProject() }
                     item("Open Project")
                     separator()
-                    item("Save") { isDisable = true }
-                    item("Save As") { isDisable = true }
-                    item("Export Mappings") { isDisable = true }
+                    item("Save") {
+                        save = this
+                    }
+                    item("Save As") {
+                        saveAs = this
+                        action {
+                            if(projectController.matchManager == null) return@action
+                            menuController.saveProjectAs()
+                        }
+                    }
+                    item("Export Mappings") {
+                        exportMappings = this
+                    }
                     separator()
                     item("Exit").action { menuController.exitApplication() }
                 }
