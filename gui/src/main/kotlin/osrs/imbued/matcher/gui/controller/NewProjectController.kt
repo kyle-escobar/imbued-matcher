@@ -94,8 +94,10 @@ class NewProjectController : Controller() {
         Logger.info("Creating new project.")
 
         val project = Matcher()
-        project.inputJar = inputJars.first()
-        project.referenceJar = referenceJars.first()
+        project.initFromFiles(
+            inputJar = inputJars.first(),
+            referenceJar = referenceJars.first()
+        )
 
         projectController.project = project
         this.reset()

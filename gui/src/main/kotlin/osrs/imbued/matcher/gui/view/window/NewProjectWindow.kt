@@ -77,7 +77,10 @@ class NewProjectWindow : View("New Project") {
                 close()
             }
 
-            button("Create").action { }
+            button("Create").action {
+                newProjectController.createProject()
+                close()
+            }
         }
     }
 }
