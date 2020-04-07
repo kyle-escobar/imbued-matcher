@@ -1,3 +1,5 @@
 rootProject.name = 'imbued-matcher'
 
 include ':gui'
+include ':matcher'
+include ':asm'

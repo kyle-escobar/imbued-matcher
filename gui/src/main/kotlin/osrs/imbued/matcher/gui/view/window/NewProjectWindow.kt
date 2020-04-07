@@ -77,7 +77,7 @@ class NewProjectWindow : View("New Project") {
                 close()
             }
 
-            button("Create")
+            button("Create").action { }
         }
     }
 }

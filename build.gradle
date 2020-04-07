@@ -41,4 +41,5 @@ application {
 
 dependencies {
     implementation project(':gui')
+    implementation project(':matcher')
 }

@@ -2,7 +2,9 @@ package osrs.imbued.matcher.gui.controller
 
 import javafx.scene.control.Alert
 import javafx.stage.FileChooser
+import org.tinylog.kotlin.Logger
 import osrs.imbued.matcher.gui.view.window.NewProjectWindow
+import osrs.imbued.matcher.matcher.Matcher
 import tornadofx.Controller
 import tornadofx.alert
 import tornadofx.asObservable
@@ -24,6 +26,8 @@ class NewProjectController : Controller() {
      * Injected views
      */
     private val newProjectWindow: NewProjectWindow by inject()
+
+    private val projectController: ProjectController by inject()
 
     /**
      * Opens the file chooser for a given jar type observable store
@@ -70,9 +74,31 @@ class NewProjectController : Controller() {
         target.remove(selectionTarget.first())
     }
 
+    /**
+     * Resets the controller
+     */
     fun reset() {
         inputJars.clear()
         referenceJars.clear()
+    }
+
+    /**
+     * Creates the project.
+     */
+    fun createProject() {
+        if(inputJars.size == 0 || referenceJars.size == 0) {
+            alert(Alert.AlertType.ERROR, "Oh Snap!", "You must select both an input and reference jar file.")
+            return
+        }
+
+        Logger.info("Creating new project.")
+
+        val project = Matcher()
+        project.inputJar = inputJars.first()
+        project.referenceJar = referenceJars.first()
+
+        projectController.project = project
+        this.reset()
     }
 
     /**
