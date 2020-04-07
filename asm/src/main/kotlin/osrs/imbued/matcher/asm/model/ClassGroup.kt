@@ -64,31 +64,28 @@ class ClassGroup {
      * Adds nodes to the [classes] store from a buffered byte array holding
      * all of the class bytes.
      */
-    fun addFromByteArray(bytes: ByteArray): Boolean {
-        return false
+    fun addFromClassBytes(entries: List<ByteArray>) {
+        entries.forEach { entry ->
+            val node = ClassNode()
+            val reader = ClassReader(entry)
+            reader.accept(node, ClassReader.SKIP_FRAMES or ClassReader.SKIP_DEBUG)
+            this.add(node)
+        }
     }
 
     /**
      * Converts the contents of [classes] to a buffered [ByteArray].
      * This is used to store within a packed
      */
-    fun toByteArray(): ByteArray {
-        val outBuf = ByteArrayOutputStream()
-        val out = JarOutputStream(outBuf)
+    fun toClassBytesList(): List<ByteArray> {
+        val list = mutableListOf<ByteArray>()
 
         classes.forEach { c ->
-            val name = c.name + ".class"
-            out.putNextEntry(JarEntry(name))
-
             val writer = ClassWriter(ClassWriter.COMPUTE_MAXS)
             c.node.accept(writer)
-            out.write(writer.toByteArray())
-            out.closeEntry()
+            list.add(writer.toByteArray())
         }
 
-        out.close()
-        outBuf.close()
-
-        return outBuf.toByteArray()
+        return list
     }
 }

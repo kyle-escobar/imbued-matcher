@@ -1,7 +1,14 @@
 package osrs.imbued.matcher.matcher.project
 
-data class ProjectJarFile(
-    val fileName: String,
-    val fileChecksum: String,
-    val type: ProjectJarType
-)
+class ProjectJarFile() {
+
+    constructor(fileName: String, fileChecksum: String, type: ProjectJarType) : this() {
+        this.fileName = fileName
+        this.fileChecksum = fileChecksum
+        this.type = type
+    }
+
+    lateinit var fileName: String
+    lateinit var fileChecksum: String
+    lateinit var type: ProjectJarType
+}

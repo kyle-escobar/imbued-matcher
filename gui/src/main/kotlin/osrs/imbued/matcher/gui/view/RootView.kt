@@ -28,8 +28,8 @@ class RootView : View("Imbued Matcher") {
 
             top = menubar {
                 menu("File") {
-                    item("New Project"). action { menuController.newProject() }
-                    item("Open Project")
+                    item("New Project").action { menuController.newProject() }
+                    item("Open Project").action { menuController.openProject() }
                     separator()
                     item("Save Project") {
                         action {

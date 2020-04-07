@@ -72,7 +72,7 @@ class MatchManager {
      * Initializes the project a project file [ByteArray]
      * @param bytes The bytes of the project file.
      */
-    fun initFromProjectFile(bytes: ByteArray) {
+    fun initFromProjectFile(bytes: ByteArray): Boolean {
         Logger.info("Initializing project from project file.")
 
         try {
@@ -91,10 +91,15 @@ class MatchManager {
             this.referenceGroup = ClassGroup()
 
             /**
-             * Load the bytes
+             * Load groups from class bytes list.
              */
+            this.inputGroup.addFromClassBytes(projectFile!!.inputGroupBytes)
+            this.referenceGroup.addFromClassBytes(projectFile!!.referenceGroupBytes)
+
+            return true
         } catch(e : Exception) {
             Logger.error(e) { "Failed to open project file. File may be corrupt. : $e" }
+            return false
         }
     }
 
@@ -108,7 +113,7 @@ class MatchManager {
         }
 
         val objectMapper = ObjectMapper(MessagePackFactory())
-        return objectMapper.writeValueAsBytes(projectFile)
+        return objectMapper.writeValueAsBytes(this.projectFile)
     }
 
     /**
@@ -118,13 +123,12 @@ class MatchManager {
         val inputJarFile = ProjectJarFile(inputJar.nameWithoutExtension, inputJar.getChecksum(), ProjectJarType.INPUT)
         val referenceJarFile = ProjectJarFile(referenceJar.nameWithoutExtension, referenceJar.getChecksum(), ProjectJarType.REFERENCE)
 
-        this.projectFile = ProjectFile(
-            projectName = this.projectName,
-            inputJar = inputJarFile,
-            referenceJar = referenceJarFile,
-            inputGroupBytes = this.inputGroup.toByteArray(),
-            referenceGroupBytes = this.referenceGroup.toByteArray()
-        )
+        this.projectFile = ProjectFile()
+        projectFile?.projectName = this.projectName
+        projectFile?.inputJar = inputJarFile
+        projectFile?.referenceJar = referenceJarFile
+        projectFile?.inputGroupBytes = this.inputGroup.toClassBytesList()
+        projectFile?.referenceGroupBytes = this.referenceGroup.toClassBytesList()
     }
 
     companion object {

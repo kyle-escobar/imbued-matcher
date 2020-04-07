@@ -1,5 +1,6 @@
 package osrs.imbued.matcher.gui.controller
 
+import javafx.scene.control.Alert
 import javafx.stage.FileChooser
 import org.tinylog.kotlin.Logger
 import osrs.imbued.matcher.gui.util.runProgressTask
@@ -7,6 +8,7 @@ import osrs.imbued.matcher.gui.view.window.NewProjectWindow
 import osrs.imbued.matcher.matcher.MatchManager
 import tornadofx.Controller
 import tornadofx.FileChooserMode
+import tornadofx.alert
 import tornadofx.chooseFile
 import java.nio.file.Files
 import kotlin.system.exitProcess
@@ -67,6 +69,10 @@ class MenuController : Controller() {
         }
     }
 
+    /**
+     * Opens the file chooser dialog to select the project file to open.
+     * By default, the file extension for this is '*.imbued'.
+     */
     fun openProject() {
         val files = chooseFile("Open Project", mode = FileChooserMode.Single, filters = arrayOf(FileChooser.ExtensionFilter("Imbued", "*.imbued")))
         if(files.isEmpty()) {
@@ -79,6 +85,11 @@ class MenuController : Controller() {
         }
 
         val matchManager = MatchManager()
-        matchManager.initFromProjectFile(bytes)
+        if(!matchManager.initFromProjectFile(bytes)) {
+            alert(Alert.AlertType.ERROR, "Oh Snap!", "Failed to open project file. Project may be corrupt.")
+        } else {
+            projectController.matchManager = matchManager
+            projectController.initProject()
+        }
     }
 }
