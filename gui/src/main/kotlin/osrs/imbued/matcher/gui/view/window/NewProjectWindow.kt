@@ -72,7 +72,11 @@ class NewProjectWindow : View("New Project") {
         hbox(5) {
             alignment = Pos.CENTER_RIGHT
 
-            button("Cancel").action { close() }
+            button("Cancel").action {
+                newProjectController.reset()
+                close()
+            }
+
             button("Create")
         }
     }

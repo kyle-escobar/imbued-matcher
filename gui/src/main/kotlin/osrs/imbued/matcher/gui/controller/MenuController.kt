@@ -23,6 +23,6 @@ class MenuController : Controller() {
      */
     fun newProject() {
         Logger.info("Opening new project window.")
-        find<NewProjectWindow>().openWindow()
+        find(NewProjectWindow::class).openModal()
     }
 }

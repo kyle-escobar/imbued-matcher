@@ -70,6 +70,11 @@ class NewProjectController : Controller() {
         target.remove(selectionTarget.first())
     }
 
+    fun reset() {
+        inputJars.clear()
+        referenceJars.clear()
+    }
+
     /**
      * The jar type.
      */
