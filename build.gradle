@@ -1,0 +1,44 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.71' apply false
+}
+
+wrapper {
+    gradleVersion = '6.2.2'
+}
+
+apply from: 'version.gradle'
+
+allprojects {
+    apply plugin: 'org.jetbrains.kotlin.jvm'
+
+    group 'osrs.imbued'
+    version '1.0'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        implementation "org.tinylog:tinylog-api-kotlin:$tinylogVersion"
+        implementation "org.tinylog:tinylog-impl:$tinylogVersion"
+    }
+
+    compileKotlin {
+        kotlinOptions.jvmTarget = "11"
+    }
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "11"
+    }
+}
+
+apply plugin: 'application'
+
+application {
+    mainClassName = "osrs.imbued.matcher.Matcher"
+}
+
+dependencies {
+    implementation project(':gui')
+}

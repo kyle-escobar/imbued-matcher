@@ -1,0 +1,14 @@
+plugins {
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+description = "Imbued Matcher GUI"
+
+javafx {
+    version = '11'
+    modules = [ 'javafx.base', 'javafx.controls', 'javafx.fxml' ]
+}
+
+dependencies {
+    implementation "no.tornado:tornadofx:$tornadofxVersion"
+}

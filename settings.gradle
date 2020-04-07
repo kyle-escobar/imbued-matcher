@@ -1,0 +1,3 @@
+rootProject.name = 'imbued-matcher'
+
+include ':gui'
