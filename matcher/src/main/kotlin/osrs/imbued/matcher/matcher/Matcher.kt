@@ -2,6 +2,7 @@ package osrs.imbued.matcher.matcher
 
 import org.tinylog.kotlin.Logger
 import osrs.imbued.matcher.asm.model.ClassGroup
+import osrs.imbued.matcher.common.Progress
 import java.io.File
 
 /**
@@ -34,13 +35,16 @@ class Matcher {
      * @param inputJar The input jar file (new jar)
      * @param referenceJar The reference jar file (old jar)
      */
-    fun initFromFiles(inputJar: File, referenceJar: File) {
+    fun initFromFiles(inputJar: File, referenceJar: File, progress: Progress) {
         Logger.info("Initializing project from files.")
 
         this.inputJar = inputJar
         this.referenceJar = referenceJar
 
-        inputGroup.extractJar(inputJar)
-        referenceGroup.extractJar(referenceJar)
+        inputGroup.extractJar(inputJar, progress)
+        referenceGroup.extractJar(referenceJar, progress)
+
+        progress.complete()
+        Logger.info("Completed project initialization.")
     }
 }

@@ -3,6 +3,7 @@ package osrs.imbued.matcher.gui.controller
 import javafx.scene.control.Alert
 import javafx.stage.FileChooser
 import org.tinylog.kotlin.Logger
+import osrs.imbued.matcher.gui.util.runProgressTask
 import osrs.imbued.matcher.gui.view.window.NewProjectWindow
 import osrs.imbued.matcher.matcher.Matcher
 import tornadofx.Controller
@@ -92,15 +93,19 @@ class NewProjectController : Controller() {
         }
 
         Logger.info("Creating new project.")
+        newProjectWindow.close()
 
-        val project = Matcher()
-        project.initFromFiles(
-            inputJar = inputJars.first(),
-            referenceJar = referenceJars.first()
-        )
+        /**
+         * Run the async parallel progress task.
+         */
+        runProgressTask("Initializing project...") {
+            it.onComplete = { this.reset() }
 
-        projectController.project = project
-        this.reset()
+            val matcher = Matcher()
+            matcher.initFromFiles(inputJars.first(), referenceJars.first(), it)
+
+            projectController.project = matcher
+        }
     }
 
     /**

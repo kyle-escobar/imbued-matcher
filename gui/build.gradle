@@ -11,6 +11,8 @@ javafx {
 
 dependencies {
     api project(':matcher')
+    api project(':common')
+    api project(':asm')
 
     implementation "no.tornado:tornadofx:$tornadofxVersion"
 }

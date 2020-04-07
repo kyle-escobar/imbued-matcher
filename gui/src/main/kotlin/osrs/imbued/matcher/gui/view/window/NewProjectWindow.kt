@@ -3,7 +3,9 @@ package osrs.imbued.matcher.gui.view.window
 import javafx.geometry.Pos
 import javafx.scene.control.SelectionMode
 import javafx.scene.layout.Priority
+import kotlinx.coroutines.delay
 import osrs.imbued.matcher.gui.controller.NewProjectController
+import osrs.imbued.matcher.gui.util.runProgressTask
 import tornadofx.*
 import java.io.File
 
@@ -79,9 +81,6 @@ class NewProjectWindow : View("New Project") {
 
             button("Create").action {
                 newProjectController.createProject()
-                close()
-
-                find<ProgressWindow>().openModal()
             }
         }
     }

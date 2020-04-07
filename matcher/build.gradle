@@ -2,4 +2,5 @@ description = "Imbued Matcher"
 
 dependencies {
     api project(':asm')
+    api project(':common')
 }

@@ -2,6 +2,7 @@ package osrs.imbued.matcher.asm.model
 
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.tree.ClassNode
+import osrs.imbued.matcher.common.Progress
 import java.io.File
 import java.util.jar.JarFile
 
@@ -27,16 +28,26 @@ class ClassGroup {
     /**
      * Extracts each class in a jar file into a [ClassNode] object.
      */
-    fun extractJar(file: File) {
-        JarFile(file).use { jar ->
-            jar.stream().iterator().asSequence()
-                .filter { it.name.endsWith(".class") }
-                .forEach {
-                    val node = ClassNode()
-                    val reader = ClassReader(jar.getInputStream(it))
-                    reader.accept(node, ClassReader.SKIP_FRAMES or ClassReader.SKIP_DEBUG)
-                    this.add(node)
-                }
+    fun extractJar(file: File, progress: Progress) {
+        val jar = JarFile(file)
+        val steps = jar.entries().iterator().asSequence().count()
+        var step = 0
+
+        val entries = jar.entries()
+        while(entries.hasMoreElements()) {
+            val entry = entries.nextElement()
+            if(entry.name.endsWith(".class")) {
+                val node = ClassNode()
+                val reader = ClassReader(jar.getInputStream(entry))
+                reader.accept(node, ClassReader.SKIP_FRAMES or ClassReader.SKIP_DEBUG)
+                this.add(node)
+
+                /**
+                 * Update progress
+                 */
+                step++
+                progress.setProgress( progress.currentProgress + (0.5 / (steps / step)))
+            }
         }
     }
 }

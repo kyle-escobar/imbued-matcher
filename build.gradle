@@ -23,6 +23,7 @@ allprojects {
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         implementation "org.tinylog:tinylog-api-kotlin:$tinylogVersion"
         implementation "org.tinylog:tinylog-impl:$tinylogVersion"
+        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxVersion"
     }
 
     compileKotlin {
@@ -43,4 +44,5 @@ dependencies {
     implementation project(':gui')
     implementation project(':matcher')
     implementation project(':asm')
+    implementation project(':common')
 }
