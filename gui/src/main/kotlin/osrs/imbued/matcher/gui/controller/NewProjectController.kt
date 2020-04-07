@@ -105,6 +105,7 @@ class NewProjectController : Controller() {
             matcher.initFromFiles(inputJars.first(), referenceJars.first(), it)
 
             projectController.project = matcher
+            projectController.initProject()
         }
     }
 
