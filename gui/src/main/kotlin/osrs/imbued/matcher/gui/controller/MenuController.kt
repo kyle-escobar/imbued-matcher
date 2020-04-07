@@ -4,6 +4,7 @@ import javafx.stage.FileChooser
 import org.tinylog.kotlin.Logger
 import osrs.imbued.matcher.gui.util.runProgressTask
 import osrs.imbued.matcher.gui.view.window.NewProjectWindow
+import osrs.imbued.matcher.matcher.MatchManager
 import tornadofx.Controller
 import tornadofx.FileChooserMode
 import tornadofx.chooseFile
@@ -39,7 +40,7 @@ class MenuController : Controller() {
     /**
      * Saves the current project to a binary project file.
      */
-    fun saveProjectAs() {
+    fun saveProject() {
         val files = chooseFile("Save Project As", mode = FileChooserMode.Save, filters = arrayOf(FileChooser.ExtensionFilter("Imbued", "*.imbued")))
         if(files.isEmpty()) {
             return
@@ -58,10 +59,26 @@ class MenuController : Controller() {
             }
 
             it.setProgress(0.1)
+            @Suppress("BlockingMethodInNonBlockingContext")
             Files.newOutputStream(file.toPath()).use { writer ->
-                writer.write(bytes)
+                writer.write(bytes!!)
             }
             it.setProgress(1.0)
         }
+    }
+
+    fun openProject() {
+        val files = chooseFile("Open Project", mode = FileChooserMode.Single, filters = arrayOf(FileChooser.ExtensionFilter("Imbued", "*.imbued")))
+        if(files.isEmpty()) {
+            return
+        }
+
+        val file = files.first()
+        val bytes = Files.newInputStream(file.toPath()).use { reader ->
+            return@use reader.readAllBytes()
+        }
+
+        val matchManager = MatchManager()
+        matchManager.initFromProjectFile(bytes)
     }
 }

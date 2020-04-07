@@ -6,4 +6,5 @@ ext {
     kotlinxVersion = '1.3.5'
     jacksonVersion = '2.10.0'
     msgpackVersion = '0.8.20'
+    streamutilsVersion = '2.0'
 }

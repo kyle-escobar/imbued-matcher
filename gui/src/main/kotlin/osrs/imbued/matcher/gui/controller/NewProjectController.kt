@@ -6,10 +6,7 @@ import org.tinylog.kotlin.Logger
 import osrs.imbued.matcher.gui.util.runProgressTask
 import osrs.imbued.matcher.gui.view.window.NewProjectWindow
 import osrs.imbued.matcher.matcher.MatchManager
-import tornadofx.Controller
-import tornadofx.alert
-import tornadofx.asObservable
-import tornadofx.chooseFile
+import tornadofx.*
 import java.io.File
 
 /**
@@ -50,7 +47,7 @@ class NewProjectController : Controller() {
         /**
          * Open the file chooser and add the file to the target observable.
          */
-        val files = chooseFile("Choose Jar", arrayOf(FileChooser.ExtensionFilter("Jar", "*.jar")))
+        val files = chooseFile("Choose Jar", mode = FileChooserMode.Single, filters = arrayOf(FileChooser.ExtensionFilter("Jar", "*.jar")))
         if(files.isEmpty()) return
         target.add(files.first())
     }

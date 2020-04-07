@@ -69,6 +69,36 @@ class MatchManager {
     }
 
     /**
+     * Initializes the project a project file [ByteArray]
+     * @param bytes The bytes of the project file.
+     */
+    fun initFromProjectFile(bytes: ByteArray) {
+        Logger.info("Initializing project from project file.")
+
+        try {
+            val objectMapper = ObjectMapper(MessagePackFactory())
+            this.projectFile = objectMapper.readValue(bytes, ProjectFile::class.java)
+
+            /**
+             * These are not valid files.
+             * Because the project file packs the original JAR file bytes, we just need to
+             * reference them for the GUI.
+             */
+            this.inputJar = File(projectFile!!.inputJar.fileName)
+            this.referenceJar = File(projectFile!!.referenceJar.fileName)
+
+            this.inputGroup = ClassGroup()
+            this.referenceGroup = ClassGroup()
+
+            /**
+             * Load the bytes
+             */
+        } catch(e : Exception) {
+            Logger.error(e) { "Failed to open project file. File may be corrupt. : $e" }
+        }
+    }
+
+    /**
      * Converts the relevant fields for a project save to a packed binary
      * file which can be saved as a project file.
      */

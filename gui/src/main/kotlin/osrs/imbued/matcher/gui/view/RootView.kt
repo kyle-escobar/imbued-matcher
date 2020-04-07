@@ -20,13 +20,6 @@ class RootView : View("Imbued Matcher") {
     private val projectController: ProjectController by inject()
 
     /**
-     * Menu items
-     */
-    var save: MenuItem by singleAssign()
-    var saveAs: MenuItem by singleAssign()
-    var exportMappings: MenuItem by singleAssign()
-
-    /**
      * Initialize the view window.
      */
     init {
@@ -38,19 +31,13 @@ class RootView : View("Imbued Matcher") {
                     item("New Project"). action { menuController.newProject() }
                     item("Open Project")
                     separator()
-                    item("Save") {
-                        save = this
-                    }
-                    item("Save As") {
-                        saveAs = this
+                    item("Save Project") {
                         action {
                             if(projectController.matchManager == null) return@action
-                            menuController.saveProjectAs()
+                            menuController.saveProject()
                         }
                     }
-                    item("Export Mappings") {
-                        exportMappings = this
-                    }
+                    item("Export Mappings")
                     separator()
                     item("Exit").action { menuController.exitApplication() }
                 }

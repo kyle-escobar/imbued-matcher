@@ -3,11 +3,17 @@ package osrs.imbued.matcher.asm.model
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.tree.ClassNode
+import org.paumard.streams.StreamsUtils
 import osrs.imbued.matcher.common.Progress
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.ByteBuffer
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.jar.JarEntry
 import java.util.jar.JarFile
+import java.util.jar.JarInputStream
+import java.util.jar.JarOutputStream
 
 /**
  * Represents an ASM loaded jar file.
@@ -55,17 +61,33 @@ class ClassGroup {
     }
 
     /**
+     * Adds nodes to the [classes] store from a buffered byte array holding
+     * all of the class bytes.
+     */
+    fun addFromByteArray(bytes: ByteArray): Boolean {
+        return false
+    }
+
+    /**
      * Converts the contents of [classes] to a buffered [ByteArray].
      * This is used to store within a packed
      */
     fun toByteArray(): ByteArray {
         val outBuf = ByteArrayOutputStream()
+        val out = JarOutputStream(outBuf)
 
         classes.forEach { c ->
+            val name = c.name + ".class"
+            out.putNextEntry(JarEntry(name))
+
             val writer = ClassWriter(ClassWriter.COMPUTE_MAXS)
             c.node.accept(writer)
-            outBuf.writeBytes(writer.toByteArray())
+            out.write(writer.toByteArray())
+            out.closeEntry()
         }
+
+        out.close()
+        outBuf.close()
 
         return outBuf.toByteArray()
     }
